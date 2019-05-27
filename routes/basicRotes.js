@@ -8,5 +8,8 @@ router.get("/", (req, res, next) => {
 router.get("/signin", (req, res, next) => {
   res.status(200).render("signin");
 });
+router.get("/signup", (req, res, next) => {
+  res.status(200).render("signup");
+});
 
 module.exports = router;

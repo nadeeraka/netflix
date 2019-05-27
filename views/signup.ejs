@@ -7,12 +7,20 @@
     <link rel="stylesheet" href="/css/signin.css" />
     <title>Sign in</title>
   </head>
+
   <body>
     <header>
       <a href="/"><img src="/img/logo.jpg" alt=""/></a>
     </header>
     <div class="form-control">
       <form action="/signin" method="POST">
+        <input
+          class="item"
+          type="text"
+          name="name"
+          placeholder="User Name"
+          required
+        />
         <input
           class="item"
           type="email"
@@ -27,7 +35,14 @@
           placeholder="Password"
           required
         />
-        <button type="submit">Sign in</button>
+        <input
+          class="item"
+          type="password"
+          name="cpassword"
+          placeholder="Re type Password"
+          required
+        />
+        <button type="submit">Sign up</button>
       </form>
     </div>
   </body>

@@ -9,3 +9,31 @@ header img {
   margin-top: 0;
   padding-top: 0;
 }
+
+.form-controller {
+  margin-top: 100px;
+}
+
+form input {
+  height: 30px;
+  display: block;
+}
+.item {
+  font-size: 15px;
+  text-align: center;
+  margin-right: 100px;
+  margin-top: 30px;
+  margin-left: 540px;
+}
+button {
+  background: #e50914;
+  color: #fff;
+  border-radius: 2px;
+  height: 40px;
+  width: 400px;
+  margin-bottom: 100px;
+  margin-left: 450px;
+  margin-top: 70px;
+  outline: none;
+  border: 1px solid #000;
+}
