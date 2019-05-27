@@ -2,15 +2,16 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controller/controller");
 const { check, body } = require("express-validator/check");
+const User = require("../models/users");
 
 router.get("/", controller.getHome);
 router.get("/signin", controller.getSignin);
-router.get("/signup", controller.signup);
+router.get("/signup", controller.getSignup);
 //post
 router.post("/signin", controller.postSignin);
 router.post(
   "/signup",
-  body("name")
+  check("name")
     .not()
     .isEmpty()
     .trim()
@@ -28,12 +29,20 @@ router.post(
     .escape()
     .isEmail()
     .withMessage("please enter some valid email")
-
     .custom((value, { req }) => {
       if (value === "test@test.com") {
         throw new Error("this email is forbidden ");
       }
       return true;
+    })
+    .custom((value, { req }) => {
+      User.findOne({
+        email: value
+      }).then(result => {
+        if (result) {
+          return Promise.reject("email already use");
+        }
+      });
     }),
   body("password")
     .not()

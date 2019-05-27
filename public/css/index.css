@@ -85,3 +85,23 @@ img {
 .btn-rounded {
   border-radius: 5px;
 }
+/* button sizes */
+
+.btn-xl {
+  font-size: 2rem;
+  padding: 1.5rem 2.1rem;
+  text-transform: uppercase;
+}
+
+.btn-lg {
+  font-size: 1rem;
+  padding: 0.8rem 1.3rem;
+  text-transform: uppercase;
+}
+.showcase-content {
+  font-size: 1rem;
+  text-align: center;
+  position: absolute;
+  left: 300px;
+  top: 350px;
+}

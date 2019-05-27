@@ -3,8 +3,13 @@ const app = express();
 const basicRouter = require("./routes/basicRotes");
 const path = require("path");
 const db = require("./database/db");
+const bodyParser = require("body-parser");
+
 // allow public content
 app.use(express.static(path.join(__dirname, "public")));
+
+//body-parser
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // ejs
 app.set("view engine", "ejs");
