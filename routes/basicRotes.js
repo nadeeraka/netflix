@@ -5,4 +5,8 @@ router.get("/", (req, res, next) => {
   res.status(200).render("index");
 });
 
+router.get("/signin", (req, res, next) => {
+  res.status(200).render("signin");
+});
+
 module.exports = router;

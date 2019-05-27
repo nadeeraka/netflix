@@ -1,0 +1,11 @@
+body {
+  background: #000;
+  margin: 0;
+}
+header img {
+  width: 50%;
+  height: 300px;
+  margin-left: 300px;
+  margin-top: 0;
+  padding-top: 0;
+}

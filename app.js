@@ -2,15 +2,20 @@ const express = require("express");
 const app = express();
 const basicRouter = require("./routes/basicRotes");
 const path = require("path");
+
+// allow public content
+app.use(express.static(path.join(__dirname, "public")));
+
 // ejs
 app.set("view engine", "ejs");
 app.set("views", "views");
 
 // routes
 app.use(basicRouter);
-
-// allow public content
-app.use(express.static(path.join(__dirname, "public")));
+//404
+app.use((req, res, next) => {
+  res.status(404).render("404");
+});
 
 const port = process.env.port || 8080;
 
