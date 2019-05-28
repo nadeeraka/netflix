@@ -7,11 +7,13 @@ const User = require("../models/users");
 router.get("/", controller.getHome);
 router.get("/signin", controller.getSignin);
 router.get("/signup", controller.getSignup);
+
 //post
 router.post("/signin", controller.postSignin);
 router.post(
   "/signup",
-  check("name")
+
+  body("name")
     .not()
     .isEmpty()
     .trim()
@@ -23,12 +25,11 @@ router.post(
     .isLength({ max: 20 })
     .withMessage("Opps!  user name too long"),
   body("email")
-    .not()
-    .isEmpty()
     .trim()
     .escape()
     .isEmail()
     .withMessage("please enter some valid email")
+
     .custom((value, { req }) => {
       if (value === "test@test.com") {
         throw new Error("this email is forbidden ");
@@ -36,9 +37,7 @@ router.post(
       return true;
     })
     .custom((value, { req }) => {
-      User.findOne({
-        email: value
-      }).then(result => {
+      return User.findOne({ email: value }).then(result => {
         if (result) {
           return Promise.reject("email already use");
         }
@@ -64,4 +63,10 @@ router.post(
 
   controller.postSignup
 );
+// ! 404 not found
+
+router.use((req, res, next) => {
+  res.status(404).render("404");
+});
+
 module.exports = router;

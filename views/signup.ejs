@@ -9,11 +9,18 @@
   </head>
 
   <body>
+    <div class="errors">
+      <% if(errors) {%>
+      <div class="error-msg">
+        <%= errorMsg %>
+      </div>
+      <% } %>
+
     <header>
       <a href="/"><img src="/img/logo.jpg" alt=""/></a>
     </header>
     <div class="form-control">
-      <form action="/signin" method="POST">
+      <form action="/signup" method="POST">
         <input
           class="item"
           type="text"
