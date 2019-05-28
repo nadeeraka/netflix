@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator/check");
-
+const User = require("../models/users");
+const bcrypt = require("bcryptjs");
 exports.getHome = (req, res, next) => {
   res.status(200).render("index");
 };
@@ -31,7 +32,20 @@ exports.getSignup = (req, res, next) => {
 
 //post
 exports.postSignin = (req, res, next) => {
-  res.status(200).render("signin");
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render("signin", {
+      errors: errors.array(),
+      errorMsg: errors.array()[0].msg
+    });
+  }
+
+  res.status(200).render("index", { errors: false });
 };
 
 exports.postSignup = (req, res, next) => {
@@ -49,5 +63,27 @@ exports.postSignup = (req, res, next) => {
       errorMsg: errors.array()[0].msg
     });
   }
+
+  // save the user and encrypt the password
+
+  bcrypt
+    .hash(password, 12)
+    .then(result => {
+      const newUser = new User({
+        name: name,
+        email: email,
+        password: result
+      })
+        .save()
+        .then(result => {
+          console.log(result);
+        })
+        .catch(err => {});
+      console.error(err);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+
   res.status(200).render("index", { title: "Welcome", errors: false });
 };

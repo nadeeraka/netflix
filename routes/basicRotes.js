@@ -9,7 +9,42 @@ router.get("/signin", controller.getSignin);
 router.get("/signup", controller.getSignup);
 
 //post
-router.post("/signin", controller.postSignin);
+router.post(
+  "/signin",
+  body("email")
+    .trim()
+    .withMessage("Don't add white space")
+    .escape()
+    .withMessage("escape")
+    .isEmail()
+    .withMessage("Not valid email")
+    .custom((value, { req }) => {
+      if (value === "test@test.com") {
+        throw new Error("this email is forbidden ");
+      }
+
+      return true;
+    })
+    .custom((value, { req }) => {
+      return User.findOne({ email: value }).then(result => {
+        if (!result) {
+          throw new Error(" First you may need to Signup ");
+        }
+      });
+    }),
+  body("password")
+    .not()
+    .isEmail()
+    .trim()
+    .escape()
+    .isAlphanumeric()
+    .withMessage("please use text and numbers for password")
+    .isLength({ min: 3 })
+
+    .isLength({ max: 20 }),
+
+  controller.postSignin
+);
 router.post(
   "/signup",
 
