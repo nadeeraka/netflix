@@ -1,6 +1,8 @@
 const { validationResult } = require("express-validator/check");
 const User = require("../models/users");
 const bcrypt = require("bcryptjs");
+const Secret = require("../util/secret");
+
 exports.getHome = (req, res, next) => {
   res.status(200).render("index");
 };
@@ -12,42 +14,6 @@ exports.getSignup = (req, res, next) => {
 };
 
 //post
-// exports.postSignin = (req, res, next) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
-//   let tempError = false;
-//   const errors = validationResult(req);
-
-//   if (!errors.isEmpty()) {
-//     console.log(errors.array());
-//     return (tempError = true);
-//     //   return res.status(422).render("signin", {
-//     //     errors: errors.array(),
-//     //     errorMsg: errors.array()[0].msg
-//     //   });
-//   }
-//   bcrypt
-//     .hash(password, 12)
-//     .then(result => {
-//       User.findOne({ email: email })
-//         .then(result => {
-//           if (!result || tempError === true) {
-//             console.log("invalid email or password");
-//             return res.status(422).render("signin", {
-//               errors: true,
-//               errorMsg: "invalid email or password"
-//             });
-//           } else {
-//             res.status(200).render("index", { errors: false });
-//           }
-//         })
-//         .catch(err => {
-//           console.error(err);
-//         });
-//     })
-//     .catch(err => {});
-// };
-
 exports.postSignin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -62,6 +28,7 @@ exports.postSignin = (req, res, next) => {
       errorMsg: errors.array()[0].msg
     });
   }
+  // find user by email
 
   User.findOne({ email: email })
     .then(user => {
@@ -71,6 +38,7 @@ exports.postSignin = (req, res, next) => {
           errorMsg: "invalid email or password"
         });
       }
+      // compare the password
       bcrypt
         .compare(password, user.password)
         .then(match => {
@@ -80,7 +48,10 @@ exports.postSignin = (req, res, next) => {
               errorMsg: "invalid email or password"
             });
           }
-          res.status(200).render("index", { errors: false });
+          // set the session
+          req.session.isLogin = true;
+          req.session.user = user;
+          req.res.status(200).render("index", { errors: false });
         })
         .catch(err => {});
     })
