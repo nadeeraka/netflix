@@ -4,13 +4,18 @@ const bcrypt = require("bcryptjs");
 const Secret = require("../util/secret");
 
 exports.getHome = (req, res, next) => {
-  res.status(200).render("index");
+  console.log(req.session.auth);
+
+  // console.log(auth);
+  res
+    .status(200)
+    .render("index", { auth: req.body.session, user: req.body.user });
 };
 exports.getSignin = (req, res, next) => {
-  res.status(200).render("signin", { errors: false });
+  res.status(200).render("signin", { errors: false, auth: req.body.session });
 };
 exports.getSignup = (req, res, next) => {
-  res.status(200).render("signup", { errors: false });
+  res.status(200).render("signup", { errors: false, auth: req.body.session });
 };
 
 //post
@@ -51,7 +56,11 @@ exports.postSignin = (req, res, next) => {
           // set the session
           req.session.isLogin = true;
           req.session.user = user;
-          req.res.status(200).render("index", { errors: false });
+          req.res.status(200).render("index", {
+            errors: false,
+            auth: req.body.session,
+            user: req.body.user
+          });
         })
         .catch(err => {});
     })
@@ -94,6 +103,12 @@ exports.postSignup = (req, res, next) => {
     .catch(err => {
       console.error(err);
     });
+  // ! set session
+  req.session.auth = true;
+  res.status(200).render("index", {
+    title: "Welcome",
+    errors: false,
 
-  res.status(200).render("index", { title: "Welcome", errors: false });
+    user: req.body.user
+  });
 };

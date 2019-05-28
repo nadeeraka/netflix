@@ -14,6 +14,11 @@
     <title>Netflix</title>
   </head>
   <body>
+    <% if(auth){%>
+    <h1>aaaaaaaaaaaa</h1>
+    <%}%> <% if(user){%>
+    <h1><%= user.name%></h1>
+    <%}%>
     <header class="showcase">
       <div class="showcase-top">
         <img src="./img/t.png" alt="logo" />
