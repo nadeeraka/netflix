@@ -11,41 +11,80 @@ exports.getSignup = (req, res, next) => {
   res.status(200).render("signup", { errors: false });
 };
 
-// exports.signup = (req, res, next) => {
-//   const name = req.body.name;
+//post
+// exports.postSignin = (req, res, next) => {
 //   const email = req.body.email;
 //   const password = req.body.password;
-//   const cpassword = req.body.cpassword;
-
+//   let tempError = false;
 //   const errors = validationResult(req);
-//   console.log(errors.array());
+
 //   if (!errors.isEmpty()) {
 //     console.log(errors.array());
-//     res.status(422).render("signup", {
-//       errors: true,
-//       errorMsg: errors.array()[0].msg
-//     });
+//     return (tempError = true);
+//     //   return res.status(422).render("signin", {
+//     //     errors: errors.array(),
+//     //     errorMsg: errors.array()[0].msg
+//     //   });
 //   }
-
-//   res.status(200).render("index", { title: "Welcome", errors: false });
+//   bcrypt
+//     .hash(password, 12)
+//     .then(result => {
+//       User.findOne({ email: email })
+//         .then(result => {
+//           if (!result || tempError === true) {
+//             console.log("invalid email or password");
+//             return res.status(422).render("signin", {
+//               errors: true,
+//               errorMsg: "invalid email or password"
+//             });
+//           } else {
+//             res.status(200).render("index", { errors: false });
+//           }
+//         })
+//         .catch(err => {
+//           console.error(err);
+//         });
+//     })
+//     .catch(err => {});
 // };
 
-//post
 exports.postSignin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  let tempError = false;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     console.log(errors.array());
+
     return res.status(422).render("signin", {
       errors: errors.array(),
       errorMsg: errors.array()[0].msg
     });
   }
 
-  res.status(200).render("index", { errors: false });
+  User.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        return res.status(422).render("signin", {
+          errors: true,
+          errorMsg: "invalid email or password"
+        });
+      }
+      bcrypt
+        .compare(password, user.password)
+        .then(match => {
+          if (!match) {
+            return res.status(422).render("signin", {
+              errors: true,
+              errorMsg: "invalid email or password"
+            });
+          }
+          res.status(200).render("index", { errors: false });
+        })
+        .catch(err => {});
+    })
+    .catch(err => {});
 };
 
 exports.postSignup = (req, res, next) => {
