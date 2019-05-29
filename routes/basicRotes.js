@@ -13,7 +13,7 @@ const redirectToLogin = (req, res, next) => {
   }
 };
 
-router.get("/", redirectToLogin, controller.getHome);
+router.get("/", controller.getHome);
 router.get("/signin", controller.getSignin);
 router.get("/signup", controller.getSignup);
 router.get("/logout", redirectToLogin, controller.logout);

@@ -23,8 +23,9 @@
         <% if(!user){ %>
 
         <a href="/signin" class="btn btn-rounded">Sign in</a>
-        <%} %>
+        <%}else{ %>
         <a href="/logout" class="btn btn-rounded">Log out</a>
+        <% }%>
       </div>
       <% if(auth) {%>
       <div class="showcase-content">
