@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator/check");
 const User = require("../models/users");
 const bcrypt = require("bcryptjs");
 const Secret = require("../util/secret");
+const SESSION_NAME = "sid";
 
 exports.getHome = (req, res, next) => {
   console.log(req.session.auth);
@@ -24,11 +25,11 @@ exports.getSignin = (req, res, next) => {
   });
 };
 exports.logout = (req, res, next) => {
-  res.status(200).render("signin", {
-    errors: false,
-    user: req.session.user,
-    auth: req.session.auth,
-    name: req.session.name
+  req.session.destroy(err => {
+    if (err) {
+      console.log("unabale to distroy session):");
+    }
+    res.clearCookie(SESSION_NAME).render("signin");
   });
 };
 exports.getSignup = (req, res, next) => {
@@ -41,6 +42,12 @@ exports.getSignup = (req, res, next) => {
     auth: req.session.auth,
     name: req.session.name
   });
+};
+exports.watch = (req, res, next) => {
+  console.log(req.session.user);
+  console.log(req.session.name);
+
+  res.redirect("www.google.com");
 };
 
 //post
@@ -85,8 +92,9 @@ exports.postSignin = (req, res, next) => {
           req.session.name = user.name;
           req.res.status(200).render("index", {
             errors: false,
-            auth: req.body.session,
-            user: req.body.user
+            user: req.session.user,
+            auth: req.session.auth,
+            name: req.session.name
           });
         })
         .catch(err => {});

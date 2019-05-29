@@ -4,10 +4,20 @@ const controller = require("../controller/controller");
 const { check, body } = require("express-validator/check");
 const User = require("../models/users");
 
-router.get("/", controller.getHome);
+// middleware that handle session
+const redirectToLogin = (req, res, next) => {
+  if (!req.session.auth && !req.session.user) {
+    res.redirect("/signin");
+  } else {
+    next();
+  }
+};
+
+router.get("/", redirectToLogin, controller.getHome);
 router.get("/signin", controller.getSignin);
 router.get("/signup", controller.getSignup);
-router.get("/logout", controller.logout);
+router.get("/logout", redirectToLogin, controller.logout);
+router.get("/watch", redirectToLogin, controller.watch);
 
 //post
 router.post(

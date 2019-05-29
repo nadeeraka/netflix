@@ -26,6 +26,15 @@
         <%} %>
         <a href="/logout" class="btn btn-rounded">Log out</a>
       </div>
+      <% if(auth) {%>
+      <div class="showcase-content">
+        <h1>What's next</h1>
+        <p>Watch anywhere cancel anytime</p>
+        <a href="/watch" class="btn btn-xl"
+          >Watch unlimited shows <i class="fas-fa-chevron-right-btn-icon"></i
+        ></a>
+      </div>
+      <% }else{ %>
       <div class="showcase-content">
         <h1>What's next</h1>
         <p>Watch anywhere cancel anytime</p>
@@ -33,6 +42,7 @@
           >Watch free fore 30 days <i class="fas-fa-chevron-right-btn-icon"></i
         ></a>
       </div>
+      <%}%>
     </header>
   </body>
 </html>
