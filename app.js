@@ -7,12 +7,21 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const secret = require("./util/secret");
 const MongoDBStore = require("connect-mongodb-session")(session);
+
+// custom const
+
+const NODE_ENV = "development",
+  SESSION_LIFE = 1000 * 60 * 60 * 2,
+  SESSION_NAME = "sid",
+  PORT = 8080;
+
+const IN_PROD = NODE_ENV === "production";
+
 // allow public content
 app.use(express.static(path.join(__dirname, "public")));
 
 //body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
-
 // session store
 const store = new MongoDBStore({
   uri: "mongodb://localhost/netflix",
@@ -20,14 +29,19 @@ const store = new MongoDBStore({
 });
 
 // session
-
+//const { SESSION_NAME, SESSION_LIFE, } = custom;
 app.use(
   session({
-    secret: "secret",
+    cookie: {
+      name: SESSION_NAME,
+      maxAge: SESSION_LIFE,
+      sameSite: true,
+      secure: IN_PROD
+    },
+    secret: secret,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: store
-    //cookie: { secure: true }
   })
 );
 
@@ -39,8 +53,13 @@ app.set("views", "views");
 app.use(basicRouter);
 
 //db connection
-const port = process.env.port || 8080;
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port} !`);
-});
+if (process.env.port) {
+  app.listen(process.env.port, () => {
+    console.log(`App listening on port ${process.env.port} !`);
+  });
+} else {
+  app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT} !`);
+  });
+}
