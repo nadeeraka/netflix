@@ -7,7 +7,8 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const secret = require("./util/secret");
 const MongoDBStore = require("connect-mongodb-session")(session);
-
+const nodemailer = require("nodemailer");
+const sendgrid = require("nodemailer-sendgrid-transport");
 // custom const
 
 const NODE_ENV = "development",
@@ -16,6 +17,8 @@ const NODE_ENV = "development",
   PORT = 8080;
 
 const IN_PROD = NODE_ENV === "production";
+
+// mail config
 
 // allow public content
 app.use(express.static(path.join(__dirname, "public")));
