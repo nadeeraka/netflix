@@ -7,6 +7,7 @@ const User = require("../models/users");
 router.get("/", controller.getHome);
 router.get("/signin", controller.getSignin);
 router.get("/signup", controller.getSignup);
+router.get("/logout", controller.logout);
 
 //post
 router.post(

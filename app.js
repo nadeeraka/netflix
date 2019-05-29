@@ -28,8 +28,10 @@ const store = new MongoDBStore({
   collection: "Sessions"
 });
 
+//console.log(secret.secret);
+
 // session
-//const { SESSION_NAME, SESSION_LIFE, } = custom;
+
 app.use(
   session({
     cookie: {
@@ -38,7 +40,7 @@ app.use(
       sameSite: true,
       secure: IN_PROD
     },
-    secret: secret,
+    secret: secret.secret,
     resave: false,
     saveUninitialized: false,
     store: store

@@ -6,16 +6,41 @@ const Secret = require("../util/secret");
 exports.getHome = (req, res, next) => {
   console.log(req.session.auth);
 
-  // console.log(auth);
-  res
-    .status(200)
-    .render("index", { auth: req.body.session, user: req.body.user });
+  console.log(req.session.user);
+  res.status(200).render("index", {
+    user: req.session.user,
+    auth: req.session.auth,
+    name: req.session.name
+  });
 };
 exports.getSignin = (req, res, next) => {
-  res.status(200).render("signin", { errors: false, auth: req.body.session });
+  console.log(req.session.user);
+  console.log(req.session.name);
+  res.status(200).render("signin", {
+    errors: false,
+    user: req.session.user,
+    auth: req.session.auth,
+    name: req.session.name
+  });
+};
+exports.logout = (req, res, next) => {
+  res.status(200).render("signin", {
+    errors: false,
+    user: req.session.user,
+    auth: req.session.auth,
+    name: req.session.name
+  });
 };
 exports.getSignup = (req, res, next) => {
-  res.status(200).render("signup", { errors: false, auth: req.body.session });
+  console.log(req.session.user);
+  console.log(req.session.name);
+
+  res.status(200).render("signup", {
+    errors: false,
+    user: req.session.user,
+    auth: req.session.auth,
+    name: req.session.name
+  });
 };
 
 //post
@@ -54,8 +79,10 @@ exports.postSignin = (req, res, next) => {
             });
           }
           // set the session
-          req.session.isLogin = true;
-          req.session.user = user;
+          console.log(user);
+          req.session.auth = true;
+          req.session.user = user._id;
+          req.session.name = user.name;
           req.res.status(200).render("index", {
             errors: false,
             auth: req.body.session,
@@ -94,8 +121,9 @@ exports.postSignup = (req, res, next) => {
         password: result
       })
         .save()
-        .then(result => {
-          console.log(result);
+        .then(user => {
+          // user = req.session.user;
+          console.log(user);
         })
         .catch(err => {});
       console.error(err);
@@ -105,10 +133,9 @@ exports.postSignup = (req, res, next) => {
     });
   // ! set session
   req.session.auth = true;
+
   res.status(200).render("index", {
     title: "Welcome",
-    errors: false,
-
-    user: req.body.user
+    errors: false
   });
 };

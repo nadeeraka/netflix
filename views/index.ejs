@@ -14,15 +14,17 @@
     <title>Netflix</title>
   </head>
   <body>
-    <% if(auth){%>
-    <h1>aaaaaaaaaaaa</h1>
-    <%}%> <% if(user){%>
-    <h1><%= user.name%></h1>
+    <% if(name){%>
+    <h1>Hey welcome <%= name%></h1>
     <%}%>
     <header class="showcase">
       <div class="showcase-top">
         <img src="./img/t.png" alt="logo" />
+        <% if(!user){ %>
+
         <a href="/signin" class="btn btn-rounded">Sign in</a>
+        <%} %>
+        <a href="/logout" class="btn btn-rounded">Log out</a>
       </div>
       <div class="showcase-content">
         <h1>What's next</h1>
