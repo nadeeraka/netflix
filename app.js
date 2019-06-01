@@ -14,7 +14,7 @@ const sendgrid = require("nodemailer-sendgrid-transport");
 const NODE_ENV = "development",
   SESSION_LIFE = 1000 * 60 * 60 * 2,
   SESSION_NAME = "sid",
-  PORT = 8080;
+  PORT = 8000;
 
 const IN_PROD = NODE_ENV === "production";
 
